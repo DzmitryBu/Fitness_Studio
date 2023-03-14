@@ -30,19 +30,23 @@ services:
     networks:
       - fitness_ntwrk
 
-  fitness-studio:
-    build: fitness-studio
-    image: fitness_fitness-studio:1.0.0
+  product-service:
+    build: product-service
+    image: fitness_product-service:1.0.0
     networks:
       - fitness_ntwrk
-    ports:
-      - "8080:8080"
+
+  user-service:
+    build: user-service
+    image: fitness_user-service:1.0.0
+    networks:
+      - fitness_ntwrk
 
   proxy:
     build: proxy
     image: fitness_proxy:1.0.0
     ports:
-      - "80:80"
+      - "8080:80"
     networks:
       - fitness_ntwrk
 networks:
