@@ -1,6 +1,5 @@
 package by.it_academy.fitness.web.filter;
 
-
 import by.it_academy.fitness.core.dto.User;
 import by.it_academy.fitness.service.api.IUserService;
 import by.it_academy.fitness.web.utils.JwtTokenUtil;
@@ -25,9 +24,11 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final IUserService userService;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    public JwtFilter(IUserService userService) {
+    public JwtFilter(IUserService userService, JwtTokenUtil jwtTokenUtil) {
         this.userService = userService;
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
@@ -44,16 +45,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // Get jwt token and validate
         final String token = header.split(" ")[1].trim();
-        if (!JwtTokenUtil.validate(token)) {
+        if (!jwtTokenUtil.validate(token)) {
             chain.doFilter(request, response);
             return;
         }
 
         User user = userService
-                .loadUserByUsername(JwtTokenUtil.getUserMail(token));
+                .loadUserByUsername(jwtTokenUtil.getUserMail(token));
         List<SimpleGrantedAuthority> roles = new ArrayList<>();
-        roles.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+//        roles.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
 
+        roles.add(new SimpleGrantedAuthority("ROLE_" + jwtTokenUtil.getUserRole(token)));
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(
                 user, null,

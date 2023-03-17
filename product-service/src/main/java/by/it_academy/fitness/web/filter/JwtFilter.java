@@ -1,9 +1,7 @@
 package by.it_academy.fitness.web.filter;
 
-
-import by.it_academy.fitness.core.dto.User;
-import by.it_academy.fitness.service.api.IUserService;
 import by.it_academy.fitness.web.utils.JwtTokenUtil;
+import by.it_academy.fitness.web.utils.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,10 +23,10 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final IUserService userService;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    public JwtFilter(IUserService userService) {
-        this.userService = userService;
+    public JwtFilter(JwtTokenUtil jwtTokenUtil) {
+        this.jwtTokenUtil = jwtTokenUtil;
     }
 
     @Override
@@ -44,20 +43,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // Get jwt token and validate
         final String token = header.split(" ")[1].trim();
-        if (!JwtTokenUtil.validate(token)) {
+        if (!jwtTokenUtil.validate(token)) {
             chain.doFilter(request, response);
             return;
         }
-
-        User user = userService
-                .loadUserByUsername(JwtTokenUtil.getUserMail(token));
-        List<SimpleGrantedAuthority> roles = new ArrayList<>();
-        roles.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+        User user = jwtTokenUtil.getUser(token);
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(
-                user, null,
-                roles
+                        user,
+                null,
+                user.getAuthorities()
         );
 
         authentication.setDetails(

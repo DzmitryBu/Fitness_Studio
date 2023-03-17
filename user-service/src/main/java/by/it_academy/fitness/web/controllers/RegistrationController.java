@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class RegistrationController {
     private final IRegistrationService service;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    public RegistrationController(IRegistrationService service) {
+    public RegistrationController(IRegistrationService service, JwtTokenUtil jwtTokenUtil) {
             this.service = service;
+            this.jwtTokenUtil = jwtTokenUtil;
     }
 
      @RequestMapping(path = "/registration", method = RequestMethod.POST)
@@ -36,7 +38,7 @@ public class RegistrationController {
      public String loging(@RequestBody UserLogin userLog) {
          User user = service.loging(userLog);
 
-         return JwtTokenUtil.generateAccessToken(user);
+         return jwtTokenUtil.generateAccessToken(user);
      }
 
 

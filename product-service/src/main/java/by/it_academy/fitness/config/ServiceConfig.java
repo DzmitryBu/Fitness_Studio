@@ -4,23 +4,15 @@ import by.it_academy.fitness.core.dto.Product;
 import by.it_academy.fitness.core.dto.RecipeForCU;
 import by.it_academy.fitness.dao.repositories.ProductRepository;
 import by.it_academy.fitness.dao.repositories.RecipeRepository;
-import by.it_academy.fitness.dao.repositories.UserRepository;
 import by.it_academy.fitness.service.*;
 import by.it_academy.fitness.service.api.*;
 import by.it_academy.fitness.service.validators.api.IValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class ServiceConfig {
-
-    @Bean
-    public IUserService userServiceService(UserRepository repository, ConversionService conversionService){
-        return new UserService(repository, conversionService);
-    }
 
     @Bean
     public IProductService productService(ProductRepository repository, ConversionService conversionService, IValidator <Product> validator){
@@ -31,9 +23,5 @@ public class ServiceConfig {
     public IRecipeService recipeService(RecipeRepository repository, ProductService productService,
                                         ConversionService conversionService, IValidator<RecipeForCU> validator){
         return new RecipeService(repository, productService, conversionService, validator);
-    }
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

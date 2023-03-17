@@ -1,63 +1,85 @@
 package by.it_academy.fitness.web.utils;
 
+import by.it_academy.fitness.config.properites.JWTProperty;
 import by.it_academy.fitness.core.dto.User;
 import io.jsonwebtoken.*;
-import org.springframework.security.core.userdetails.UserDetails;
-
+import org.springframework.stereotype.Component;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+@Component
 public class JwtTokenUtil {
 
-    private static final String jwtSecret = "NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw";
-    private static final String jwtIssuer = "Fitness_Studio_BUL";
+    private final JWTProperty property;
 
-
-    public static String generateAccessToken(User user) {
-        return generateAccessToken(user.getMail());
+    public JwtTokenUtil(JWTProperty property) {
+        this.property = property;
     }
 
-    public static String generateAccessToken(String mail) {
+
+    public String generateAccessToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("fio", user.getFio());
+        claims.put("mail", user.getMail());
+        claims.put("role", user.getRole());
+        claims.put("uuid", user.getUuid());
         return Jwts.builder()
-                .setSubject(mail)
-//                .setClaims()
-                .setIssuer(jwtIssuer)
+                .setClaims(claims)
+                .setIssuer(property.getIssuer())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(7))) // 1 week
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, property.getSecret())
                 .compact();
     }
 
-    public static String getUsername(String token) {
+    public String getUsername(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
+                .setSigningKey(property.getSecret())
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims.getSubject();
+        return claims.get("fio", String.class);
     }
 
-    public static String getUserMail(String token) {
+    public String getUserMail(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
+                .setSigningKey(property.getSecret())
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims.getSubject();
+        return claims.get("mail", String.class);
+    }
+    public String getUserRole(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(property.getSecret())
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.get("role", String.class);
+    }
+    public String getUserUUDI(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(property.getSecret())
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.get("uuid", String.class);
     }
 
-    public static Date getExpirationDate(String token) {
+    public Date getExpirationDate(String token) {
         Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
+                .setSigningKey(property.getSecret())
                 .parseClaimsJws(token)
                 .getBody();
 
         return claims.getExpiration();
     }
 
-    public static boolean validate(String token) {
+    public boolean validate(String token) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(property.getSecret()).parseClaimsJws(token);
             return true;
         } catch (SignatureException ex) {
             //logger.error("Invalid JWT signature - {}", ex.getMessage());
