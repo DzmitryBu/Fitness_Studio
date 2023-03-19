@@ -16,13 +16,13 @@ spring:
     default-encoding: UTF-8
     host: smtp.mail.ru
     port: 465
-    username: dm_bax@mail.ru # логин от учётки Yandex
-    password: BebURVGgR1G0dQ5WhdmM # специальный пароль для приложения
+    username: # логин от учётки Yandex
+    password:  # специальный пароль для приложения
     test-connection: true # проверка подключения при старте приложения
     protocol: smtps
   data:
     redis:
       url: http://localhost:8080/api/v1/users/verification
 jwt:
-  secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
+  secret: 
   issuer: Fitness_Studio_BUL
