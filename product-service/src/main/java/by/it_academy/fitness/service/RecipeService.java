@@ -36,7 +36,7 @@ public class RecipeService implements IRecipeService {
     @Override
     public void add(RecipeForCU recipeForCU) {
         if(recipeForCU == null){
-            throw new SingleErrorResponse("Заполните форму для регистрации нового пользователя.");
+            throw new SingleErrorResponse("Заполните форму для регистрации нового рецепта.");
         }
 
         validator.validation(recipeForCU);

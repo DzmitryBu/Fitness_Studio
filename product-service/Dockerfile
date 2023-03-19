@@ -1,5 +1,5 @@
 FROM eclipse-temurin:17-jre-focal
-MAINTAINER ITAcademy
+MAINTAINER BulDima
 
 ADD ./target/product-service-0.0.1-SNAPSHOT.jar /app/
 

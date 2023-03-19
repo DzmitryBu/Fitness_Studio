@@ -1,7 +1,7 @@
-\c root
+\c productsDB
 
 CREATE SCHEMA IF NOT EXISTS public
-    AUTHORIZATION root;
+    AUTHORIZATION "user";
 
 CREATE TABLE IF NOT EXISTS public.recipes
 (

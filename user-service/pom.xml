@@ -11,7 +11,7 @@
 
 	<groupId>by.it_academy</groupId>
 	<artifactId>user-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<name>user-service</name>
 
 	<description>User-service</description>

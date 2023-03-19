@@ -1,14 +1,27 @@
 version: '3.5'
 services:
-  db:
-    build: postgresql
-    image: fitness_postgresql:1.0.0
+  usersDB:
+    build: usersDB
+    image: users_postgresql:1.0.0
     restart: always
     environment:
-      POSTGRES_USER: root
+      POSTGRES_USER: user
       POSTGRES_PASSWORD: root
+      POSTGRES_DB: usersDB
     ports:
       - "1111:5432"
+    networks:
+      - fitness_ntwrk
+  productsDB:
+    build: productsDB
+    image: products_postgresql:1.0.0
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: productsDB
+    ports:
+      - "1112:5432"
     networks:
       - fitness_ntwrk
   pgadmin:
