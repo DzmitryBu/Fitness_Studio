@@ -5,6 +5,8 @@ import by.it_academy.fitness.core.exception.MultipleErrorResponse;
 import by.it_academy.fitness.core.exception.MyError;
 import by.it_academy.fitness.core.exception.SingleErrorResponse;
 import by.it_academy.fitness.dao.repositories.RegistrationRepository;
+import by.it_academy.fitness.entity.RoleEntity;
+import by.it_academy.fitness.entity.StatusEntity;
 import by.it_academy.fitness.entity.UserCreateEntity;
 import by.it_academy.fitness.service.api.IRegistrationService;
 import by.it_academy.fitness.service.api.IUserService;
@@ -56,7 +58,7 @@ public class RegistrationService implements IRegistrationService {
         userCreateEntity.setPassword(encoder.encode(userRegistration.getPassword()));
         userCreateEntity.setDtCreate(dtCreate);
         userCreateEntity.setDtUpdate(dtCreate);
-        userCreateEntity.setRole(UserRole.USER);
+        userCreateEntity.setRole(new RoleEntity(UserRole.USER));
 
         registrationRepository.save(userCreateEntity);
 
@@ -102,15 +104,15 @@ public class RegistrationService implements IRegistrationService {
             throw new SingleErrorResponse("error", "Указаны не верные данные для верификации.");
         }
 
-        if(userCreateEntity.getStatus().equals(UserStatus.ACTIVATED)){
+        if(userCreateEntity.getStatus().getStatus().equals(UserStatus.ACTIVATED)){
             throw new SingleErrorResponse("Ваш аккаунт уже активирован.");
         }
-        if(userCreateEntity.getStatus().equals(UserStatus.DEACTIVATED)){
+        if(userCreateEntity.getStatus().getStatus().equals(UserStatus.DEACTIVATED)){
             throw new SingleErrorResponse("Ваш аккаунт заблокирован, обратитесь к администратору.");
         }
-        if(userCreateEntity.getStatus().equals(UserStatus.WAITING_ACTIVATION)){
+        if(userCreateEntity.getStatus().getStatus().equals(UserStatus.WAITING_ACTIVATION)){
             userCreateEntity.setDtUpdate(LocalDateTime.now());
-            userCreateEntity.setStatus(UserStatus.ACTIVATED);
+            userCreateEntity.setStatus(new StatusEntity(UserStatus.ACTIVATED));
             registrationRepository.save(userCreateEntity);
         }
         if(multipleError.getErrors().size()>0){
@@ -142,10 +144,10 @@ public class RegistrationService implements IRegistrationService {
         }
         UserCreateEntity userCreateEntity = optionalUserCreateEntityMail.get();
 
-        if(userCreateEntity.getStatus().equals(UserStatus.WAITING_ACTIVATION)){
+        if(userCreateEntity.getStatus().getStatus().equals(UserStatus.WAITING_ACTIVATION)){
             throw new SingleErrorResponse("Ваш аккаунт не активирован! Пройдите верификацию!");
         }
-        if(userCreateEntity.getStatus().equals(UserStatus.DEACTIVATED)){
+        if(userCreateEntity.getStatus().getStatus().equals(UserStatus.DEACTIVATED)){
             throw new SingleErrorResponse("Ваш аккаунт заблокирован, обратитесь к администратору!");
         }
         if(!encoder.matches(userLogin.getPassword(), userCreateEntity.getPassword())){

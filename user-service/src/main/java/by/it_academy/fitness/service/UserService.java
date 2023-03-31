@@ -5,6 +5,8 @@ import by.it_academy.fitness.core.dto.User;
 import by.it_academy.fitness.core.dto.UserCreate;
 import by.it_academy.fitness.core.exception.SingleErrorResponse;
 import by.it_academy.fitness.dao.repositories.UserRepository;
+import by.it_academy.fitness.entity.RoleEntity;
+import by.it_academy.fitness.entity.StatusEntity;
 import by.it_academy.fitness.entity.UserCreateEntity;
 import by.it_academy.fitness.service.api.IUserService;
 import by.it_academy.fitness.service.validators.api.IValidator;
@@ -119,9 +121,9 @@ public class UserService implements IUserService {
 
         userCreateEntity.setMail(userCreate.getMail());
         userCreateEntity.setFio(userCreate.getFio());
-        userCreateEntity.setRole(userCreate.getRole());
+        userCreateEntity.setRole(new RoleEntity(userCreate.getRole()));
         userCreateEntity.setDtUpdate(LocalDateTime.now());
-        userCreateEntity.setStatus(userCreate.getStatus());
+        userCreateEntity.setStatus(new StatusEntity(userCreate.getStatus()));
         userCreateEntity.setPassword(encoder.encode(userCreate.getPassword()));
         repository.save(userCreateEntity);
     }

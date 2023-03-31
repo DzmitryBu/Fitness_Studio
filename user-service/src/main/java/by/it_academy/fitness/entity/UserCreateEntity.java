@@ -5,6 +5,7 @@ import by.it_academy.fitness.core.dto.UserStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -27,9 +28,11 @@ public class UserCreateEntity {
     private String fio;
 
     @Column(name = "dt_create")
+    @NotNull
     private LocalDateTime dtCreate;
 
     @Column(name = "dt_update")
+    @NotNull
     @Version
     private LocalDateTime dtUpdate;
 
@@ -37,13 +40,18 @@ public class UserCreateEntity {
     @NotNull
     private String mail;
 
-    @Enumerated(EnumType.ORDINAL)
-    private UserRole role;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "role")
+    @NotNull
+    private RoleEntity role;
 
-    @Enumerated(EnumType.ORDINAL)
-    private UserStatus status;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "status")
+    @NotNull
+    private StatusEntity status;
 
     @Column(name = "password")
+    @NotNull
     private String password;
 
     public UserCreateEntity() {
@@ -54,8 +62,8 @@ public class UserCreateEntity {
                             LocalDateTime dtCreate,
                             LocalDateTime dtUpdate,
                             String mail,
-                            UserRole role,
-                            UserStatus status,
+                            RoleEntity role,
+                            StatusEntity status,
                             String password) {
         this.uuid = uuid;
         this.fio = fio;
@@ -87,11 +95,11 @@ public class UserCreateEntity {
         return mail;
     }
 
-    public UserRole getRole() {
+    public RoleEntity getRole() {
         return role;
     }
 
-    public UserStatus getStatus() {
+    public StatusEntity getStatus() {
         return status;
     }
 
@@ -115,11 +123,11 @@ public class UserCreateEntity {
         this.dtUpdate = dtUpdate;
     }
 
-    public void setRole(UserRole role) {
+    public void setRole(RoleEntity role) {
         this.role = role;
     }
 
-    public void setStatus(UserStatus status) {
+    public void setStatus(StatusEntity status) {
         this.status = status;
     }
 

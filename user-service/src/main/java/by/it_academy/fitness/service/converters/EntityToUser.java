@@ -15,7 +15,7 @@ public class EntityToUser implements Converter <UserCreateEntity, User> {
                 userEntity.getDtUpdate(),
                 userEntity.getMail(),
                 userEntity.getFio(),
-                userEntity.getRole(),
-                userEntity.getStatus());
+                userEntity.getRole().getRole(),
+                userEntity.getStatus().getStatus());
     }
 }
