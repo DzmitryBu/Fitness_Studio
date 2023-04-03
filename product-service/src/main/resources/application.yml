@@ -8,13 +8,10 @@ spring:
       ddl-auto: none
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://db:5432/root # для доступа к БД в рамках docker
-    #url: jdbc:postgresql://localhost:1111/root  # для работы с БД через приложение
-    username: root
+    url: jdbc:postgresql://productsDB:5432/productsDB # для доступа к БД в рамках docker
+    #url: jdbc:postgresql://localhost:1112/productsDB  # для работы с БД через приложение
+    username: user
     password: root
-  data:
-    redis:
-      url: http://localhost:8080/api/v1/users/verification
 jwt:
   secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
   issuer: Fitness_Studio_BUL

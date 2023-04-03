@@ -8,7 +8,6 @@ import by.it_academy.fitness.service.api.IRegistrationService;
 import by.it_academy.fitness.web.utils.JwtTokenUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,9 +36,6 @@ public class RegistrationController {
      @RequestMapping(path = "/login", method = RequestMethod.POST)
      public String loging(@RequestBody UserLogin userLog) {
          User user = service.loging(userLog);
-
          return jwtTokenUtil.generateAccessToken(user);
      }
-
-
 }

@@ -28,10 +28,12 @@ public class ServiceConfig {
     }
 
     @Bean
-    public IRegistrationService registrationService(RegistrationRepository registrationRepository, IUserService userService,
-                                            MailSender mailSender, ConversionService conversionService,
-                                                    IValidator <UserRegistration> validator, PasswordEncoder encoder){
-        return new RegistrationService(registrationRepository, userService, mailSender, conversionService, validator, encoder);
+    public IRegistrationService registrationService(RegistrationRepository registrationRepository,
+                                                    IUserService userService,
+                                                    ConversionService conversionService,
+                                                    IValidator <UserRegistration> validator,
+                                                    PasswordEncoder encoder){
+        return new RegistrationService(registrationRepository, userService, conversionService, validator, encoder);
     }
 
     @Bean
@@ -39,33 +41,4 @@ public class ServiceConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Value("${spring.mail.host}")
-    private String host;
-
-    @Value("${spring.mail.username}")
-    private String username;
-
-    @Value("${spring.mail.password}")
-    private String password;
-
-    @Value("${spring.mail.port}")
-    private int port;
-
-    @Value("${spring.mail.protocol}")
-    private String protocol;
-
-    @Bean
-    public JavaMailSender getMailSender(){
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-
-        mailSender.setHost(host);
-        mailSender.setUsername(username);
-        mailSender.setPassword(password);
-        mailSender.setPort(port);
-
-        Properties properties = mailSender.getJavaMailProperties();
-        properties.setProperty("mail.transport.protocol", protocol);
-
-        return mailSender;
-    }
 }

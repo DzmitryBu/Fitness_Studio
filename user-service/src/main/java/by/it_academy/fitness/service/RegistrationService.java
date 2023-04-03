@@ -11,32 +11,37 @@ import by.it_academy.fitness.entity.UserCreateEntity;
 import by.it_academy.fitness.service.api.IRegistrationService;
 import by.it_academy.fitness.service.api.IUserService;
 import by.it_academy.fitness.service.validators.api.IValidator;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
 public class RegistrationService implements IRegistrationService {
 
+    private static final String URL_MAIL_SERVICE = "http://mail-service:8080/mail/send";
     @Value("${spring.data.redis.url}")
     private String URL;
     private final RegistrationRepository registrationRepository;
     private final IUserService userService;
-    private final MailSender mailSender;
     private final ConversionService conversionService;
     private final IValidator <UserRegistration> validator;
     private final PasswordEncoder encoder;
 
-    public RegistrationService(RegistrationRepository registrationRepository, IUserService userService,
-                               MailSender mailSender, ConversionService conversionService,
+    public RegistrationService(RegistrationRepository registrationRepository, IUserService userService, ConversionService conversionService,
                                IValidator <UserRegistration> validator, PasswordEncoder encoder) {
         this.registrationRepository = registrationRepository;
         this.userService = userService;
-        this.mailSender = mailSender;
         this.conversionService = conversionService;
         this.validator = validator;
         this.encoder = encoder;
@@ -62,12 +67,11 @@ public class RegistrationService implements IRegistrationService {
 
         registrationRepository.save(userCreateEntity);
 
-
         String message = "Здравствуйте, " + userCreateEntity.getFio() + "! \n" +
                 "Добро пожаловать на наш сайт. Пожалуйста, перейдите по ссылки для активации аккаунта " + URL +
                 "?code=" + userCreateEntity.getUuid() + "&mail=" + userCreateEntity.getMail();
 
-        mailSender.send(userCreateEntity.getMail(), "Активация аккаунта", message);
+        sendToService(userCreateEntity.getMail(), message);
     }
 
     @Override
@@ -162,5 +166,27 @@ public class RegistrationService implements IRegistrationService {
     @Override
     public User getCard(UUID uuid) {
        return userService.getCard(uuid);
+    }
+
+    private void sendToService (String mailTo, String massage){
+
+        HttpClient httpclient = HttpClients.createDefault();
+        HttpPost httppost = new HttpPost(URL_MAIL_SERVICE);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("mailTo", mailTo);
+        jsonObject.put("message", massage);
+        jsonObject.put("subject", "Активация аккаунта");
+
+        httppost.setEntity(new StringEntity(jsonObject.toString(), "UTF-8"));
+        httppost.setHeader("Content-Type", "application/json");
+
+        HttpResponse response = null;
+        try {
+            response = httpclient.execute(httppost);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        HttpEntity entity = response.getEntity();
     }
 }
