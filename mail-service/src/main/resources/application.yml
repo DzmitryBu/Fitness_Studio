@@ -1,9 +1,0 @@
-spring:
-  mail:
-    default-encoding: UTF-8
-    host: smtp.mail.ru
-    port: 465
-    username: dm_bax@mail.ru # логин от учётки Yandex
-    password: qYHxSLZfffYsz6yewkYu # специальный пароль для приложения
-    test-connection: true # проверка подключения при старте приложения
-    protocol: smtps
