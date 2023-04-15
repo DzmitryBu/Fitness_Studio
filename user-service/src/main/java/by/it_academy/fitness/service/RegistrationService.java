@@ -71,7 +71,7 @@ public class RegistrationService implements IRegistrationService {
                 "Добро пожаловать на наш сайт. Пожалуйста, перейдите по ссылки для активации аккаунта " + URL +
                 "?code=" + userCreateEntity.getUuid() + "&mail=" + userCreateEntity.getMail();
 
-        sendToService(userCreateEntity.getMail(), message);
+       sendToMailService(userCreateEntity.getMail(), message);
     }
 
     @Override
@@ -168,7 +168,7 @@ public class RegistrationService implements IRegistrationService {
        return userService.getCard(uuid);
     }
 
-    private void sendToService (String mailTo, String massage){
+    private void sendToMailService (String mailTo, String massage){
 
         HttpClient httpclient = HttpClients.createDefault();
         HttpPost httppost = new HttpPost(URL_MAIL_SERVICE);

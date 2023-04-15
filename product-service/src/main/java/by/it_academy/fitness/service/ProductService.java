@@ -97,11 +97,20 @@ public class ProductService implements IProductService {
         repository.save(productEntity);
     }
 
-    public ProductEntity getProductEntity (UUID uuid){
+    @Override
+    public ProductEntity getProductEntity(UUID uuid){
         Optional <ProductEntity> optionalProductEntityUUID = repository.findById(uuid);
         if(optionalProductEntityUUID.isEmpty()){
             throw new SingleErrorResponse("Продукта с указанным uuid не найдено.");
         }
         return optionalProductEntityUUID.get();
+    }
+    @Override
+    public ProductEntity getProductEntity(String title){
+        Optional <ProductEntity> optionalProductEntityTitle = repository.findByTitle(title);
+        if(optionalProductEntityTitle.isEmpty()){
+            throw new SingleErrorResponse("Продукта с указанным названием не найдено.");
+        }
+        return optionalProductEntityTitle.get();
     }
 }

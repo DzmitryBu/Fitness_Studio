@@ -12,6 +12,18 @@ services:
       - "1111:5432"
     networks:
       - fitness_ntwrk
+  auditDB:
+    build: auditDB
+    image: audits_postgresql:1.0.0
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: auditDB
+    ports:
+      - "1113:5432"
+    networks:
+      - fitness_ntwrk
   productsDB:
     build: productsDB
     image: products_postgresql:1.0.0
@@ -58,6 +70,12 @@ services:
   mail-service:
     build: mail-service
     image: fitness_mail-service:1.0.0
+    networks:
+      - fitness_ntwrk
+
+  audit-service:
+    build: audit-service
+    image: fitness_audit-service-0.1.0
     networks:
       - fitness_ntwrk
 

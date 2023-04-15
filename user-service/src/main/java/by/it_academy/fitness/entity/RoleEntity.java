@@ -2,6 +2,7 @@ package by.it_academy.fitness.entity;
 
 import by.it_academy.fitness.core.dto.UserRole;
 import jakarta.persistence.*;
+
 import java.util.Objects;
 
 @Entity

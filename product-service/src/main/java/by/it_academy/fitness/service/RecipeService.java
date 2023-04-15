@@ -166,4 +166,21 @@ public class RecipeService implements IRecipeService {
 
         repository.save(recipeEntity);
     }
+    @Override
+    public RecipeEntity getRecipeEntity(UUID uuid){
+        Optional <RecipeEntity> optionalRecipeEntityUUID = repository.findById(uuid);
+        if(optionalRecipeEntityUUID.isEmpty()){
+            throw new SingleErrorResponse("Рецепт с указанным uuid не найден.");
+        }
+        return optionalRecipeEntityUUID.get();
+    }
+    @Override
+    public RecipeEntity getRecipeEntity(String title){
+        Optional <RecipeEntity> optionalRecipeEntityTitle = repository.findByTitle(title);
+        if(optionalRecipeEntityTitle.isEmpty()){
+            throw new SingleErrorResponse("Рецепт с указанным названием не найден.");
+        }
+        return optionalRecipeEntityTitle.get();
+    }
+
 }

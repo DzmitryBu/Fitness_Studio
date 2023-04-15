@@ -1,12 +1,7 @@
 package by.it_academy.fitness.entity;
 
-import by.it_academy.fitness.core.dto.UserRole;
-import by.it_academy.fitness.core.dto.UserStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.validation.annotation.Validated;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
