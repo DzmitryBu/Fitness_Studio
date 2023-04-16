@@ -13,5 +13,5 @@ spring:
     username: user
     password: root
 jwt:
-  secret: 
+  secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
   issuer: Fitness_Studio_BUL

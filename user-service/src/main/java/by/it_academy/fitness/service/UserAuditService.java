@@ -38,7 +38,7 @@ public class UserAuditService {
             UserCreate arg = (UserCreate) args[0];
 
             String uuid = userService.loadUserByUsername(arg.getMail()).getUuid().toString();
-            User user = userService.getCard(userHolder.getUser().getUuid());
+            User user = userHolder.getUser();
 
             Audit audit = new Audit();
             audit.setUser(user);
@@ -60,7 +60,7 @@ public class UserAuditService {
             UUID uuid = (UUID) args[0];
 
             Audit audit = new Audit();
-            User user = userService.getCard(userHolder.getUser().getUuid());
+            User user = userHolder.getUser();
             audit.setUser(user);
             audit.setText("Администратор обновил информации об User c UUID: " + uuid);
             audit.setType(EssenceType.USER);

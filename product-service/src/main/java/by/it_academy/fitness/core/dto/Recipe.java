@@ -1,6 +1,7 @@
 package by.it_academy.fitness.core.dto;
 
 import by.it_academy.fitness.service.converters.json.LocalDateTimeToLongSerializer;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.math.BigDecimal;
@@ -10,19 +11,28 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Recipe {
+    @JsonProperty("uuid")
     private UUID uuid;
     @JsonSerialize(using = LocalDateTimeToLongSerializer.class)
+    @JsonProperty("dt_create")
     private LocalDateTime dtCreate;
 
     @JsonSerialize(using = LocalDateTimeToLongSerializer.class)
+    @JsonProperty("dt_update")
     private LocalDateTime dtUpdate;
+    @JsonProperty("title")
     private String title;
+    @JsonProperty("composition")
     private List<Ingredient> composition;
-
+    @JsonProperty("weight")
     private int weight;
+    @JsonProperty("calories")
     private int calories;
+    @JsonProperty("proteins")
     private BigDecimal proteins;
+    @JsonProperty("fats")
     private BigDecimal fats;
+    @JsonProperty("carbohydrates")
     private BigDecimal carbohydrates;
 
     public Recipe(UUID uuid,
