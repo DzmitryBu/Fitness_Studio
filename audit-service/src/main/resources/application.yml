@@ -15,4 +15,6 @@ spring:
     #url: jdbc:postgresql://localhost:5432/orders  # для работы с БД через приложение
     #username: postgres
     #password: postgres
-
+jwt:
+  secret: NDQ1ZjAzNjQtMzViZi00MDRjLTljZjQtNjNjYWIyZTU5ZDYw
+  issuer: Fitness_Studio_BUL
